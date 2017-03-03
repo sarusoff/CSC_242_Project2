@@ -4,6 +4,7 @@ import org.junit.Test;
 import pl.core.Negation;
 import pl.core.Sentence;
 import pl.core.Symbol;
+import pl.examples.HornClausesKB;
 import pl.examples.ModusPonensKB;
 import pl.examples.WumpusWorldKB;
 
@@ -88,6 +89,28 @@ public class ModelCheckingTest {
                  HORN CLAUSES TESTS
      ************************************************/
 
+    // tests question a
+    @Test
+    public void inferMythicalFalse(){
+        ModelChecking test = new ModelChecking(new HornClausesKB());
+        Sentence myth = new Symbol("myth");
+        Assert.assertFalse(test.entails(myth));
+    }
 
+    // tests question b
+    @Test
+    public void inferMagicalTrue(){
+        ModelChecking test = new ModelChecking(new HornClausesKB());
+        Sentence mag = new Symbol("mag");
+        Assert.assertTrue(test.entails(mag));
+    }
+
+    // tests question c
+    @Test
+    public void inferHornedTrue(){
+        ModelChecking test = new ModelChecking(new HornClausesKB());
+        Sentence h = new Symbol("h");
+        Assert.assertTrue(test.entails(h));
+    }
 
 }
