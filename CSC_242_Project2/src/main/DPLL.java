@@ -112,31 +112,56 @@ public class DPLL {
         return temp;
     }
 
+    // at least one literal in the clause is true in the model
+    public boolean clauseKnownToBeTrue(Clause clause, MyModel model) {
+        for (Literal l : clause){
+            if (model.containsSymbol(l.getContent()) && l.isSatisfiedBy(model)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // every literal in the clause is known to be faulse
+    public boolean clauseKnownToBeFalse(Clause clause, MyModel model) {
+        for (Literal l : clause){
+            if (!model.containsSymbol(l.getContent())){
+                return false;
+            }
+            if (l.isSatisfiedBy(model)){
+                return false;
+            }
+        }
+        return true;
+    }
 
     private Literal findPureSymbol(Set<Clause> clauses, MyModel model, Stack<Symbol> symbols) {
 
         // add all literals of all clauses
         // made it a hashmap so that we could link the map key to the Literal object
+        // don't add literals that are in a clause already known to be true
         HashMap<String,Literal> map = new HashMap<String,Literal>();
         for (Clause clause : clauses){
-            for (Literal l : clause){
-                if (l.getPolarity() == Literal.Polarity.NEGATIVE){
-                    map.put("n"+l.getContent().toString(),l);
-                } else {
-                    map.put(l.getContent().toString(),l);
+            if (!clauseKnownToBeTrue(clause,model)) { // skip the clause if it's known to be true
+                for (Literal l : clause) {
+                    if (!model.containsSymbol(l.getContent())) {    // only include literals not assigned in model
+                        if (l.getPolarity() == Literal.Polarity.NEGATIVE) {
+                            map.put("n" + l.getContent().toString(), l);
+                        } else {
+                            map.put(l.getContent().toString(), l);
+                        }
+                    }
                 }
             }
         }
 
         // if there is any symbol in the clauses that only has a positive or negative polarity, and not both, return that symbol
-        for (Clause clause : clauses){
-            for (Literal l : clause) {
-                if (map.containsKey(l.getContent().toString()) && !map.containsKey("n" + l.getContent().toString())) {
-                    return map.get(l.getContent().toString());
-                }
-                else if (!map.containsKey(l.getContent().toString()) && map.containsKey("n" + l.getContent().toString())){
-                    return map.get("n" + l.getContent().toString());
-                }
+        for (Symbol sym : symbols){ // symbols contains the symbols not yet assigned in the model
+            if (map.containsKey(sym.toString()) && !map.containsKey("n" + sym.toString())) {
+                return map.get(sym.toString());
+            }
+            else if (!map.containsKey(sym.toString()) && map.containsKey("n" + sym.toString())){
+                return map.get("n" + sym.toString());
             }
         }
         return null;
@@ -151,51 +176,18 @@ public class DPLL {
         return true;
     }
 
-
     private boolean atLeastOneClauseInModelIsFalse(Set<Clause> clauses, MyModel model) {
         for (Clause clause : clauses){
-            if (!allSymbolsInClauseAreInModel(clause,model)){
-                continue;     // only test the clause if each symbol in that clause is assigned in the model already
-            }
-            if (!atLeastOneLiteralIsTrue(clause,model)){
-                return true;    // not a single literal in clause is true, so the clause is false
-            }
-        }
-        return false;
-    }
-
-    private boolean atLeastOneLiteralIsTrue(Clause clause, MyModel model){
-        for (Literal l : clause){
-            if (l.isSatisfiedBy(model)){
+            if (clauseKnownToBeFalse(clause,model)){
                 return true;
             }
         }
         return false;
     }
 
-    private boolean allSymbolsInClausesAssignedInModel(Set<Clause> clauses, MyModel model){
-        for (Clause clause : clauses){
-            for (Literal l : clause){
-                Symbol s = l.getContent();
-                if (!model.containsSymbol(s)){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     private boolean allClausesTrueInModel(Set<Clause> clauses, MyModel model) {
-
-        // first, check to make sure that any symbols in the clauses have been assigned in the model
-        // if a symbol in a clause hasn't been assigned in the model yet, then there's no way all clauses are true in the model
-        if (!allSymbolsInClausesAssignedInModel(clauses,model)) {
-            return false;
-        }
-
-        // then, check to see if each symbol is true in the model
         for (Clause clause : clauses){
-            if (!clause.isSatisfiedBy(model)){
+            if (!clauseKnownToBeTrue(clause,model)) {
                 return false;
             }
         }

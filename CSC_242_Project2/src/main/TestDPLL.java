@@ -4,6 +4,8 @@ import pl.cnf.Clause;
 import pl.core.Negation;
 import pl.core.Sentence;
 import pl.core.Symbol;
+import pl.examples.HornClausesKB;
+import pl.examples.ModusPonensKB;
 import pl.examples.WumpusWorldKB;
 
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ public class TestDPLL {
         // so to combine the KB and !Beta, we create a new list of sentences that constists of KB and !Beta
 
 
+        // if a -> beta, then test.satisfiable() returns false
+
         /************************************************
          WUMPUS WORLD TESTS
          ************************************************/
@@ -43,9 +47,9 @@ public class TestDPLL {
         Collection<Sentence> sentences = test.kb.sentences();
         sentences.add(new Negation(notP11)); // add !Beta
         Set<Clause> clauses = test.convert(sentences);
-//        if (test.satisfiable(clauses)){ // we expect it to be NOT satisfiable
-//            failures.add("Test failed: canInferNotP11");
-//        }
+        if (test.satisfiable(clauses)){ // we expect it to be NOT satisfiable
+            failures.add("Test failed: canInferNotP11");
+        }
 
 //       cantInferP12
         test = new DPLL(new WumpusWorldKB());
@@ -56,45 +60,45 @@ public class TestDPLL {
         if (!test.satisfiable(clauses)){ // we expect it to be YES satisfiable --> (can't infer p12)
             failures.add("Test failed: cantInferP12");
         }
-//
-////        cantInferNotP12
-//        test = new DPLL(new WumpusWorldKB());
-//        Sentence notP12 = new Negation(new Symbol("P1,2"));
-//        sentences = test.kb.sentences();
-//        sentences.add(new Negation(notP12)); // add !Beta
-//        clauses = test.convert(sentences);
-//        if (!test.satisfiable(clauses)){
-//            failures.add("Test failed: cantInferNotP12");
-//        }
-//
-////        cantInferP31
-//        // Given just our current KB, we don't know if the pit is in 2,2 or 3,1
-//        test = new DPLL(new WumpusWorldKB());
-//
-//        // we should not be able to infer the P31=True
-//        sentences = test.kb.sentences();
-//        Sentence p31 = new Symbol("P3,1");
-//        sentences.add(new Negation(p31)); // add !Beta
-//        clauses = test.convert(sentences);
-//        if (!test.satisfiable(clauses)){  // we expect it to be satisfiable --> (can't entail Beta)
-//            failures.add("Test failed: cantInferP31");
-//        }
-//
-////        givenNotP22InferP31
-//        // generate new sentence in KB saying that P22=False
-//        Sentence notP22 = new Negation(new Symbol("P2,2"));
-//        WumpusWorldKB kb = new WumpusWorldKB();
-//        kb.add(notP22);
-//        test = new DPLL(kb);
-//
-//        // Now, we are able to use this added information to infer that P31 is true
-//        sentences = test.kb.sentences();
-//        p31 = new Symbol("P3,1");
-//        sentences.add(new Negation(p31)); // add !Beta
-//        clauses = test.convert(sentences);
-//        if (test.satisfiable(clauses)){  // we expect it to be !satisfiable --> (Yes entail Beta)
-//            failures.add("Test failed: givenNotP22InferP31");
-//        }
+
+//        cantInferNotP12
+        test = new DPLL(new WumpusWorldKB());
+        Sentence notP12 = new Negation(new Symbol("P1,2"));
+        sentences = test.kb.sentences();
+        sentences.add(new Negation(notP12)); // add !Beta
+        clauses = test.convert(sentences);
+        if (!test.satisfiable(clauses)){ // YES satisfiable, we can't infer it
+            failures.add("Test failed: cantInferNotP12");
+        }
+
+//        cantInferP31
+        // Given just our current KB, we don't know if the pit is in 2,2 or 3,1
+        test = new DPLL(new WumpusWorldKB());
+
+        // we should not be able to infer the P31=True
+        sentences = test.kb.sentences();
+        Sentence p31 = new Symbol("P3,1");
+        sentences.add(new Negation(p31)); // add !Beta
+        clauses = test.convert(sentences);
+        if (!test.satisfiable(clauses)){  // we expect it to be satisfiable --> (can't entail Beta)
+            failures.add("Test failed: cantInferP31");
+        }
+
+//        givenNotP22InferP31
+        // generate new sentence in KB saying that P22=False
+        Sentence notP22 = new Negation(new Symbol("P2,2"));
+        WumpusWorldKB kb = new WumpusWorldKB();
+        kb.add(notP22);
+        test = new DPLL(kb);
+
+        // Now, we are able to use this added information to infer that P31 is true
+        sentences = test.kb.sentences();
+        p31 = new Symbol("P3,1");
+        sentences.add(new Negation(p31)); // add !Beta
+        clauses = test.convert(sentences);
+        if (test.satisfiable(clauses)){  // we expect it to be !satisfiable --> (Yes infer that P3,1=TRUE)
+            failures.add("Test failed: givenNotP22InferP31");
+        }
 
 
 
@@ -103,14 +107,52 @@ public class TestDPLL {
          ************************************************/
 
         // inferQTrue
-//        test = new DPLL(new ModusPonensKB());
-//        Sentence q = new Symbol("Q");
-//        sentences = test.kb.sentences();
-//        sentences.add(new Negation(q)); // add !Beta
-//        clauses = test.convert(sentences);
-//        if (test.satisfiable(clauses)){ // we expect it to be NOT unsatisfiable
-//            failures.add("Test failed: inferQTrue");
-//        }
+        test = new DPLL(new ModusPonensKB());
+        Sentence q = new Symbol("Q");
+        sentences = test.kb.sentences();
+        sentences.add(new Negation(q)); // add !Beta
+        clauses = test.convert(sentences);
+        if (test.satisfiable(clauses)){ // we expect it to be NOT unsatisfiable
+            failures.add("Test failed: inferQTrue");
+        }
+
+
+        /************************************************
+         HORN CLAUSES TESTS
+         ************************************************/
+
+        // tests question a
+        //inferMythicalFalse
+        test = new DPLL(new HornClausesKB());
+        Sentence myth = new Symbol("myth");
+        sentences = test.kb.sentences();
+        sentences.add(new Negation(myth)); // add !Beta
+        clauses = test.convert(sentences);
+        if (!test.satisfiable(clauses)){
+            failures.add("Test failed: nferMythicalFalse");
+        }
+
+        // tests question b
+        //inferMagicalTrue
+        test = new DPLL(new HornClausesKB());
+        Sentence mag = new Symbol("mag");
+        sentences = test.kb.sentences();
+        sentences.add(new Negation(mag)); // add !Beta
+        clauses = test.convert(sentences);
+        if (test.satisfiable(clauses)){
+            failures.add("Test failed: inferMagicalTrue");
+        }
+
+        // tests question c
+        //inferHornedTrue
+        test = new DPLL(new HornClausesKB());
+        Sentence h = new Symbol("h");
+        sentences = test.kb.sentences();
+        sentences.add(new Negation(h)); // add !Beta
+        clauses = test.convert(sentences);
+        if (test.satisfiable(clauses)){
+            failures.add("Test failed: inferHornedTrue");
+        }
 
 
         printFailures(failures);

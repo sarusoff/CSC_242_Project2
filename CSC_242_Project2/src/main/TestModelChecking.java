@@ -91,7 +91,7 @@ public class TestModelChecking {
          ************************************************/
 
         // tests question a
-        //nferMythicalFalse
+        //inferMythicalFalse
             test = new ModelChecking(new HornClausesKB());
             Sentence myth = new Symbol("myth");
             if (test.entails(myth)){

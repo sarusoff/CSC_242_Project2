@@ -6,7 +6,11 @@
  */
 
 package pl.cnf;
-import pl.core.*;
+
+import main.MyModel;
+import pl.core.BinaryCompoundSentence;
+import pl.core.BinaryConnective;
+import pl.core.Sentence;
 import pl.util.ArraySet;
 
 /**
@@ -70,17 +74,35 @@ public class Clause extends ArraySet<Literal> {
 		return buf.toString();
 	}
 
+
+	// **********************************************
+	//
+	// This doesn't seem to fit the definition of a clause
+	// isn't a clause true if any of its literals are true??
+	// rewrote the method to satisfy my definition
+
     /**
      * Return true if this Clause is satisfied by the given Model.
      * That is, if each of its Literals is satisfied by the Model.
      */
-	public boolean isSatisfiedBy(Model model) {
-		for (Literal literal : this) {
-			if (!literal.isSatisfiedBy(model)) {
-				return false;
+
+//	public boolean isSatisfiedBy(Model model) {
+//		for (Literal literal : this) {
+//			if (!literal.isSatisfiedBy(model)) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+
+	// my version of isSatisfiedBy for a clause
+	public boolean isSatisfiedBy(MyModel model){
+		for (Literal l : this){
+			if (l.isSatisfiedBy(model)){
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 }
