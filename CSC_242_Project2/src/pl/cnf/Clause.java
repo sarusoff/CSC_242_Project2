@@ -16,14 +16,6 @@ import pl.util.ArraySet;
 /**
  * A clause is a disjunction of literals.
  * We represent it as a set for ease of use later.
- * <p>
- * Note that the current implementation of this class extends ArraySet, which
- * itself extends AbstractSet, which overrides {@link Object#equals} and
- *{@link Object#hashCode} (with {@link AbstractSet#equals} and
- *{@link Abstract#hashCode}, respectively). Thus we do not need to
- * provide implementations of those methods ourselves (but if we did,
- * we would need to remember that <q>the hash code of a set is defined
- * to be the sum of the hash codes of the elements in the set.</q>
  */
 public class Clause extends ArraySet<Literal> {
 
@@ -75,27 +67,18 @@ public class Clause extends ArraySet<Literal> {
 	}
 
 
-	// **********************************************
-	//
-	// This doesn't seem to fit the definition of a clause
-	// isn't a clause true if any of its literals are true??
-	// rewrote the method to satisfy my definition
+
+
+	/* ****************************************
+				My added methods
+	 **************************************** */
 
     /**
      * Return true if this Clause is satisfied by the given Model.
-     * That is, if each of its Literals is satisfied by the Model.
+     * That is, if any of its Literals is satisfied by the Model.
      */
 
-//	public boolean isSatisfiedBy(Model model) {
-//		for (Literal literal : this) {
-//			if (!literal.isSatisfiedBy(model)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-
-	// my version of isSatisfiedBy for a clause
+	// my version of isSatisfiedBy for a Clause
 	public boolean isSatisfiedBy(MyModel model){
 		for (Literal l : this){
 			if (l.isSatisfiedBy(model)){
@@ -104,5 +87,29 @@ public class Clause extends ArraySet<Literal> {
 		}
 		return false;
 	}
+
+	// at least one literal in the clause is true in the model
+	public boolean knownToBeTrue(MyModel model) {
+		for (Literal l : this){
+			if (model.containsSymbol(l.getContent()) && l.isSatisfiedBy(model)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// every literal in the clause is known to be faulse
+	public boolean knownToBeFalse(MyModel model) {
+		for (Literal l : this){
+			if (!model.containsSymbol(l.getContent())){
+				return false;
+			}
+			if (l.isSatisfiedBy(model)){
+				return false;
+			}
+		}
+		return true;
+	}
+
 
 }

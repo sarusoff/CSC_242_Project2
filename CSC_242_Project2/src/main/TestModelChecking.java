@@ -10,9 +10,6 @@ import pl.examples.WumpusWorldKB;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by danielsaltz on 3/1/17.
- */
 public class TestModelChecking {
 
     public static void main(String...args){
@@ -20,7 +17,7 @@ public class TestModelChecking {
         List<String> failures = new ArrayList<String>();
 
         /************************************************
-         WUMPUS WORLD TESTS
+                    WUMPUS WORLD TESTS
          ************************************************/
 
 //        inferThatNotP11True
@@ -69,7 +66,7 @@ public class TestModelChecking {
 
 
         /************************************************
-         MODUS PONENS TESTS
+                        MODUS PONENS TESTS
          ************************************************/
 
 //        inferQTrue
@@ -87,7 +84,7 @@ public class TestModelChecking {
             }
 
         /************************************************
-         HORN CLAUSES TESTS
+                        HORN CLAUSES TESTS
          ************************************************/
 
         // tests question a
@@ -115,7 +112,6 @@ public class TestModelChecking {
             }
 
         printFailures(failures);
-//        test.printModels();
     }
 
     private static void printFailures(List<String> failures) {

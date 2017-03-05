@@ -1,5 +1,15 @@
+
+/*
+
+-An implementation of the Model interface
+-Uses a HashMap to record the assignment of true or false values to Symbols
+
+*/
+
+
 package main;
 
+import pl.cnf.Clause;
 import pl.core.KB;
 import pl.core.Model;
 import pl.core.Sentence;
@@ -7,10 +17,9 @@ import pl.core.Symbol;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-/**
- * Created by danielsaltz on 3/1/17.
- */
+
 public class MyModel implements Model{
 
     protected HashMap<String,Boolean> map;
@@ -19,31 +28,35 @@ public class MyModel implements Model{
        map = new HashMap<String,Boolean>();
     }
 
-    // added for DPLL algorithm
+    /**
+     * Used in TestDPLL
+     * -assigns a boolean to a symbol, and returns the updated MyModel
+     */
     public MyModel assign(Symbol sym, boolean value){
         map.put(sym.toString(),value);
         return this;
     }
 
+    /**
+     * Used in TestModelChecking
+     */
     @Override
     public void set(Symbol sym, boolean value) {
         map.put(sym.toString(),value);
     }
 
-    // this is the method that ultimately compares every Symbol in a sentence to the symbol of the query
-    // get(sym) should return true if the model has sym being true, and false if the model has sym being false
+    /**
+     * The method that ultimately compares every Symbol in a sentence to the truth value in the model
+     * get(sym) should return true if the model has sym being true, and false if the model has sym being false
+     */
     @Override
     public boolean get(Symbol sym) {
-//        if (map.containsKey(sym.toString())) {
-            return map.get(sym.toString());
-//        }
-//        return true; // if the map doesn't contain that key, return true so it doesn't rule out a possibility
+        return map.get(sym.toString());
     }
 
     public boolean containsSymbol(Symbol sym){
         return map.containsKey(sym.toString());
     }
-
 
     // if the any sentence does not satisfy the KB, then the model fails
     public boolean satisfies(KB kb) {
@@ -67,6 +80,25 @@ public class MyModel implements Model{
                 System.out.print(entry.getKey() + ": " + entry.getValue() + "  ");
             }
         }
+    }
+
+
+    public boolean atLeastOneClauseFalse(Set<Clause> clauses) {
+        for (Clause clause : clauses){
+            if (clause.knownToBeFalse(this)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allClausesTrue(Set<Clause> clauses) {
+        for (Clause clause : clauses){
+            if (!clause.knownToBeTrue(this)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

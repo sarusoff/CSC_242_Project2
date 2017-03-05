@@ -3,9 +3,6 @@ package main;
 import pl.core.Symbol;
 
 
-/**
- * Created by danielsaltz on 3/5/17.
- */
 public class SymbolAssignment {
 
     private boolean value;

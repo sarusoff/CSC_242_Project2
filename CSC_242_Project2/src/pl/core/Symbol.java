@@ -28,7 +28,7 @@ public class Symbol implements Sentence {
 	/**
 	 * Two PropositionSymbols are equals iff they have the same name.
 	 * Note that this is expensive to test. You are much better off using
-	 * {@code intern} to convert names to symbols, in which case all symbols
+	 * {@code intern} to convertToClauses names to symbols, in which case all symbols
 	 * with the same name are the same object, in which case you can use
 	 * {@code ==} to compare them.
 	 * But this method is here for methods that use {@code equals}, such

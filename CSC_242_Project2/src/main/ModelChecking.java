@@ -7,9 +7,6 @@ import pl.core.Symbol;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by danielsaltz on 3/1/17.
- */
 public class ModelChecking {
     private KB kb;
     private MyModel[] models;
@@ -32,9 +29,9 @@ public class ModelChecking {
     /*
 -Generates all 2^n models
 -Accomplishes this by taking advantage of how binary numbers work
--takes the binary number from 0 to 2^n, converts to a string, and then has
+-takes the binary number from 0 to 2^n, converts it to a string, and then has
     each character represent a symbol.
--The symbols must be ordered in the same way that each new model runs, I used an ArrayList
+-The symbols must be ordered in the same way that each new model runs, I used an ArrayList to maintain the order
 */
     private MyModel[] generateModels(){
         List<Symbol> symbols = new ArrayList<Symbol>();
