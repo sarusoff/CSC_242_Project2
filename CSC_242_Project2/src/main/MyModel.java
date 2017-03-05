@@ -13,10 +13,16 @@ import java.util.Map;
  */
 public class MyModel implements Model{
 
-    HashMap<String,Boolean> map;
+    protected HashMap<String,Boolean> map;
 
     public MyModel(){
        map = new HashMap<String,Boolean>();
+    }
+
+    // added for DPLL algorithm
+    public MyModel assign(Symbol sym, boolean value){
+        map.put(sym.toString(),value);
+        return this;
     }
 
     @Override
@@ -28,11 +34,18 @@ public class MyModel implements Model{
     // get(sym) should return true if the model has sym being true, and false if the model has sym being false
     @Override
     public boolean get(Symbol sym) {
-        return map.get(sym.toString());
+//        if (map.containsKey(sym.toString())) {
+            return map.get(sym.toString());
+//        }
+//        return true; // if the map doesn't contain that key, return true so it doesn't rule out a possibility
     }
 
+    public boolean containsSymbol(Symbol sym){
+        return map.containsKey(sym.toString());
+    }
+
+
     // if the any sentence does not satisfy the KB, then the model fails
-    @Override
     public boolean satisfies(KB kb) {
         for (Sentence s : kb.sentences()){
             if (!s.isSatisfiedBy(this)){
@@ -49,8 +62,10 @@ public class MyModel implements Model{
 
     @Override
     public void dump() {
-        for (Map.Entry<String,Boolean> entry : map.entrySet()){
-            System.out.print(entry.getKey() + ": " + entry.getValue() + "  ");
+        if (!map.isEmpty()){
+            for (Map.Entry<String,Boolean> entry : map.entrySet()){
+                System.out.print(entry.getKey() + ": " + entry.getValue() + "  ");
+            }
         }
     }
 

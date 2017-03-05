@@ -3,6 +3,8 @@ package main;
 import pl.core.Negation;
 import pl.core.Sentence;
 import pl.core.Symbol;
+import pl.examples.HornClausesKB;
+import pl.examples.ModusPonensKB;
 import pl.examples.WumpusWorldKB;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Created by danielsaltz on 3/1/17.
  */
-public class Main {
+public class TestModelChecking {
 
     public static void main(String...args){
 
@@ -65,55 +67,55 @@ public class Main {
                 failures.add("Test failed: givenNotP22InferP31");
             }
 
-//
-//        /************************************************
-//         MODUS PONENS TESTS
-//         ************************************************/
-//
-////        inferQTrue
-//            test = new ModelChecking(new ModusPonensKB());
-//            Sentence q = new Symbol("Q");
-//            if (!test.entails(q)){
-//                failures.add("Test failed: inferQTrue");
-//            }
-//
-////          inferNotQFalse
-//            test = new ModelChecking(new ModusPonensKB());
-//            Sentence notQ = new Negation(new Symbol("Q"));
-//            if (test.entails(notQ)){
-//                failures.add("Test failed: inferNotQFalse");
-//            }
-//
-//        /************************************************
-//         HORN CLAUSES TESTS
-//         ************************************************/
-//
-//        // tests question a
-//        //nferMythicalFalse
-//            test = new ModelChecking(new HornClausesKB());
-//            Sentence myth = new Symbol("myth");
-//            if (test.entails(myth)){
-//                failures.add("Test failed: nferMythicalFalse");
-//            }
-//
-//        // tests question b
-//        //inferMagicalTrue
-//            test = new ModelChecking(new HornClausesKB());
-//            Sentence mag = new Symbol("mag");
-//            if (!test.entails(mag)){
-//                failures.add("Test failed: inferMagicalTrue");
-//            }
-//
-//        // tests question c
-//        //inferHornedTrue
-//            test = new ModelChecking(new HornClausesKB());
-//            Sentence h = new Symbol("h");
-//            if (!test.entails(h)){
-//                failures.add("Test failed: inferHornedTrue");
-//            }
+
+        /************************************************
+         MODUS PONENS TESTS
+         ************************************************/
+
+//        inferQTrue
+            test = new ModelChecking(new ModusPonensKB());
+            Sentence q = new Symbol("Q");
+            if (!test.entails(q)){
+                failures.add("Test failed: inferQTrue");
+            }
+
+//          inferNotQFalse
+            test = new ModelChecking(new ModusPonensKB());
+            Sentence notQ = new Negation(new Symbol("Q"));
+            if (test.entails(notQ)){
+                failures.add("Test failed: inferNotQFalse");
+            }
+
+        /************************************************
+         HORN CLAUSES TESTS
+         ************************************************/
+
+        // tests question a
+        //nferMythicalFalse
+            test = new ModelChecking(new HornClausesKB());
+            Sentence myth = new Symbol("myth");
+            if (test.entails(myth)){
+                failures.add("Test failed: nferMythicalFalse");
+            }
+
+        // tests question b
+        //inferMagicalTrue
+            test = new ModelChecking(new HornClausesKB());
+            Sentence mag = new Symbol("mag");
+            if (!test.entails(mag)){
+                failures.add("Test failed: inferMagicalTrue");
+            }
+
+        // tests question c
+        //inferHornedTrue
+            test = new ModelChecking(new HornClausesKB());
+            Sentence h = new Symbol("h");
+            if (!test.entails(h)){
+                failures.add("Test failed: inferHornedTrue");
+            }
 
         printFailures(failures);
-        test.printModels();
+//        test.printModels();
     }
 
     private static void printFailures(List<String> failures) {
