@@ -23,7 +23,7 @@ public class TestDPLL {
 
         printFailures(failures);
     }
-//    private static List<String> testTruthTellers(ModelChecking test, List<String> failures){
+//    private static List<String> testTruthTellers(DPLL test, List<String> failures){
 //        TruthTellersKB truthTellersKB = new TruthTellersKB();
 //
 //        //part A
@@ -56,7 +56,7 @@ public class TestDPLL {
 //       return failures;
 //    }
 //
-//    private static List<String> testAdvancedTruthTellers(ModelChecking test, List<String> failures){
+//    private static List<String> testAdvancedTruthTellers(DPLL test, List<String> failures){
 //        AdvancedTruthTellersKB Advtruthtellers = new AdvancedTruthTellersKB();
 //
 //        //infer Amy False
