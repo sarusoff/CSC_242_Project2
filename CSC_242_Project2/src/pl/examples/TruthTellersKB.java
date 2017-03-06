@@ -37,4 +37,8 @@ public class TruthTellersKB extends KB {
     add(new Implication(cal2, bob2);
                         
     }
+        
+        public static void main(String[] argv) {
+		      new TruthTellersKB().dump();
+	  }
 }
