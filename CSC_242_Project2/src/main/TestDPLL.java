@@ -14,17 +14,63 @@ public class TestDPLL {
 
     public static void main(String... args){
 
+        DPLL test = new DPLL();
         List<String> failures = new ArrayList<String>();
 
+        failures = testWumpusWorld(test,failures);
+        failures = testModusPonens(test,failures);
+        failures = testHornClauses(test,failures);
 
-        DPLL test = new DPLL();
+        printFailures(failures);
+    }
 
+    private static List<String> testHornClauses(DPLL test, List<String> failures) {
+        // tests question a
+        //inferMythicalFalse
+        HornClausesKB hornClausesKB = new HornClausesKB();
+        Sentence myth = new Symbol("myth");
+        if (!test.satisfiable(hornClausesKB,myth)){
+            failures.add("Test failed: nferMythicalFalse");
+        }
 
-        /************************************************
-                     WUMPUS WORLD TESTS
-         ************************************************/
+        // tests question b
+        //inferMagicalTrue
+        hornClausesKB = new HornClausesKB();
+        Sentence mag = new Symbol("mag");
+        if (test.satisfiable(hornClausesKB,mag)){
+            failures.add("Test failed: inferMagicalTrue");
+        }
 
-//        canInferNotP11
+        // tests question c
+        //inferHornedTrue
+        hornClausesKB = new HornClausesKB();
+        Sentence h = new Symbol("h");
+        if (test.satisfiable(hornClausesKB,h)){
+            failures.add("Test failed: inferHornedTrue");
+        }
+        return failures;
+    }
+
+    private static List<String> testModusPonens(DPLL test, List<String> failures) {
+
+        // inferQ
+        ModusPonensKB modusPonensKB = new ModusPonensKB();
+        Sentence q = new Symbol("Q");
+        if (test.satisfiable(modusPonensKB,q)){ // we expect it to be NOT unsatisfiable
+            failures.add("Test failed: inferQ");
+        }
+
+        // inferNotQ
+        modusPonensKB = new ModusPonensKB();
+        Sentence notQ = new Negation(new Symbol("Q"));
+        if (!test.satisfiable(modusPonensKB,notQ)){ // we expect it to be YES satisfiable
+            failures.add("Test failed: inferNotQ");
+        }
+        return failures;
+    }
+
+    private static List<String> testWumpusWorld(DPLL test, List<String> failures) {
+ //        canInferNotP11
         WumpusWorldKB wumpusWorldKB = new WumpusWorldKB();
         Sentence notP11 = new Negation(new Symbol("P1,1"));
         if (test.satisfiable(wumpusWorldKB,notP11)){ // we expect it to be NOT satisfiable
@@ -66,63 +112,13 @@ public class TestDPLL {
         if (test.satisfiable(wumpusWorldKB,p31)){  // we expect it to be NOT satisfiable --> (Yes infer that P3,1=TRUE)
             failures.add("Test failed: givenNotP22InferP31");
         }
-
-
-        /************************************************
-                     MODUS PONENS TESTS
-         ************************************************/
-
-        // inferQ
-        ModusPonensKB modusPonensKB = new ModusPonensKB();
-        Sentence q = new Symbol("Q");
-        if (test.satisfiable(modusPonensKB,q)){ // we expect it to be NOT unsatisfiable
-            failures.add("Test failed: inferQ");
-        }
-
-        // inferNotQ
-        modusPonensKB = new ModusPonensKB();
-        Sentence notQ = new Negation(new Symbol("Q"));
-        if (!test.satisfiable(modusPonensKB,notQ)){ // we expect it to be YES satisfiable
-            failures.add("Test failed: inferNotQ");
-        }
-
-
-        /************************************************
-         HORN CLAUSES TESTS
-         ************************************************/
-
-        // tests question a
-        //inferMythicalFalse
-        HornClausesKB hornClausesKB = new HornClausesKB();
-        Sentence myth = new Symbol("myth");
-        if (!test.satisfiable(hornClausesKB,myth)){
-            failures.add("Test failed: nferMythicalFalse");
-        }
-
-        // tests question b
-        //inferMagicalTrue
-        hornClausesKB = new HornClausesKB();
-        Sentence mag = new Symbol("mag");
-        if (test.satisfiable(hornClausesKB,mag)){
-            failures.add("Test failed: inferMagicalTrue");
-        }
-
-        // tests question c
-        //inferHornedTrue
-        hornClausesKB = new HornClausesKB();
-        Sentence h = new Symbol("h");
-        if (test.satisfiable(hornClausesKB,h)){
-            failures.add("Test failed: inferHornedTrue");
-        }
-
-
-        printFailures(failures);
+        return failures;
     }
 
     private static void printFailures(List<String> failures) {
         System.out.println();
         if (failures.isEmpty()){
-            System.out.println("No failures!");
+            System.out.println("All tests passed!");
         } else {
             for (String s : failures){
                 System.out.println(s);

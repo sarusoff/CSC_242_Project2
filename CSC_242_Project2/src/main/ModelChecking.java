@@ -8,16 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelChecking {
-    private KB kb;
-    private MyModel[] models;
-
-    public ModelChecking(KB kb){
-        this.kb = kb;
-        this.models = generateModels();
-    }
 
     // alpha is entailed unless there's a model that is satisfied by the KB but not satisfied by alpha
-    public boolean entails(Sentence alpha) {
+    public boolean entails(KB kb, Sentence alpha) {
+        MyModel[] models = generateModels(kb);
         for (MyModel m : models){
             if (m.satisfies(kb) && !m.satisfies(alpha)){
                 return false;
@@ -33,7 +27,7 @@ public class ModelChecking {
     each character represent a symbol.
 -The symbols must be ordered in the same way that each new model runs, I used an ArrayList to maintain the order
 */
-    private MyModel[] generateModels(){
+    private MyModel[] generateModels(KB kb){
         List<Symbol> symbols = new ArrayList<Symbol>();
         symbols.addAll(kb.symbols());
         int n = symbols.size();
@@ -53,14 +47,6 @@ public class ModelChecking {
             models[i] = m;
         }
         return models;
-    }
-
-    // used for testing
-    public void printModels(){
-        for (MyModel m : models){
-            m.dump();
-            System.out.println();
-        }
     }
 
 }
