@@ -7,6 +7,7 @@ public class TruthTellersKB extends KB {
     public TruthTellersKB(){
         super();
     /*
+    Part A
 % Three people, Amy, Bob, and Cal, are each either a liar 
 % or a truth-teller. Assume that liars always lie, and 
 % truth-tellers always tell the truth.
@@ -17,11 +18,12 @@ public class TruthTellersKB extends KB {
     Symbol amy = intern("amy");
     Symbol cal = intern("cal");
     Symbol bob = intern("bob");
-    add(new Implication(amy, new Conjunction(cal,amy));
-    add(new Implicaton(bob, new Negation(cal));
-    add(new Implication(cal new Disjunction(bob,new Negation(amy));
+    add(new Implication(amy, new Conjunction(cal,amy)));
+    add(new Implication(bob, new Negation(cal)));
+    add(new Implication(cal, new Disjunction(bob,new Negation(amy))));
 //-----------------------------------------------------------------    
-/* 
+/*
+    Part B
 % Three people, Amy, Bob, and Cal, are each either a liar 
 % or a truth-teller. 0Assume that liars always lie, and 
 % truth-tellers always tell the truth.
@@ -32,9 +34,9 @@ public class TruthTellersKB extends KB {
     Symbol amy2 = intern("amy2");
     Symbol cal2 = intern("cal2");
     Symbol bob2 = intern("bob2");
-    add(new Implication(amy2, new Negation(cal2));
+    add(new Implication(amy2, new Negation(cal2)));
     add(new Implication(bob2, new Conjunction(amy2, cal2)));
-    add(new Implication(cal2, bob2);
+    add(new Implication(cal2, bob2));
                         
     }
         
