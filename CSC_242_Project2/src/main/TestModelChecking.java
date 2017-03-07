@@ -47,43 +47,33 @@ public class TestModelChecking {
            failures.add("Test failed: inferBobFalse");
        }
        //Cal is true.
-       truthtellersKB = new TruthTellersKB();
+       truthTellersKB = new TruthTellersKB();
        Sentence cal = new Symbol("cal");
-        if(!test.entails(truthTellersKB,cal)){
+        if(test.entails(truthTellersKB,cal)){
             failures.add("Test failed: inferCalTrue");
         }
         
    //----------------------------------------------------------     
      //Part B
-     
-    /* //infer Amy2 is True
-      truthTellersKB = new TruthTellersKB();
-      Sentence amy2 = new Symbol("amy2");
-      if (!test.entails(truthTellersKB,amy2)){
-           failures.add("Test failed: inferAmy2True");
-      }*/
         
        //infer Amy2 is False
       truthTellersKB = new TruthTellersKB();
-      amy2 = new Symbol("amy2");
+        Symbol amy2 = new Symbol("amy2");
       if (test.entails(truthTellersKB,amy2)){
            failures.add("Test failed: inferAmy2False");
       }
         //infer bob2 is False
       truthTellersKB = new TruthTellersKB();
-      bob2 = new Symbol("bob2");
+        Symbol bob2 = new Symbol("bob2");
       if (test.entails(truthTellersKB,bob2)){
            failures.add("Test failed: inferBob2False");
       }
        //infer Cal2 is True
       truthTellersKB = new TruthTellersKB();
-      bob2 = new Symbol("cal2");
-      if (test.entails(truthTellersKB,cal2)){
+       bob2 = new Symbol("cal2");
+      if (test.entails(truthTellersKB,bob2)){
            failures.add("Test failed: inferCal2True");
       }
-       
-        
-        
       return failures;
     }
                                  
